@@ -1,0 +1,22 @@
+#!/bin/sh
+
+indent() {
+  sed -u 's/^/       /'
+}
+
+echo "-----> Found a tsconfig.json"
+
+# if tscongif.json is empty, abort the build
+if [ ! -s $1/tsconfig.json ]; then
+  echo "tsconfig.json was empty" | indent
+  exit 1
+else 
+  # check if the file can be parsed
+  local ts_engine=$(read_json "$BUILD_DIR/package.json" ".engines.typescript")
+  if [ ! -n "$ts_engine"]; then
+    echo "Installing Typescript" | indent
+    npm install -g typescript@"$ts_engine"
+    tsc
+    exit 1
+fi
+
