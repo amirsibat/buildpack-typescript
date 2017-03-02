@@ -18,5 +18,6 @@ else
     npm install -g typescript@"$ts_engine"
     tsc
     exit 1
+  fi
 fi
 
