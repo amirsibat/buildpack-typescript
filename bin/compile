@@ -36,6 +36,14 @@ source $BP_DIR/lib/binaries.sh
 source $BP_DIR/lib/cache.sh
 source $BP_DIR/lib/dependencies.sh
 
+indent() {
+  c='s/^/       /'
+  case $(uname) in
+    Darwin) sed -l "$c";;
+    *)      sed -u "$c";;
+  esac
+}
+
 echo "-----> Found a tsconfig.json"
 
 # if tscongif.json is empty, abort the build
