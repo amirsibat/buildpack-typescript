@@ -1,4 +1,12 @@
-#!/bin/sh
+#!/usr/bin/env bash
+# bin/compile <build-dir> <cache-dir> <env-dir>
+
+### Configure environment
+
+set -o errexit    # always exit on error
+set -o pipefail   # don't ignore exit codes when piping output
+set -o nounset    # fail on unset variables
+unset GIT_DIR     # Avoid GIT_DIR leak from previous build steps
 
 ### Constants
 
@@ -28,10 +36,6 @@ source $BP_DIR/lib/binaries.sh
 source $BP_DIR/lib/cache.sh
 source $BP_DIR/lib/dependencies.sh
 
-indent() {
-  sed -u 's/^/       /'
-}
-
 echo "-----> Found a tsconfig.json"
 
 # if tscongif.json is empty, abort the build
@@ -42,8 +46,9 @@ else
   # check if the file can be parsed
   local ts_engine=$(read_json "$BUILD_DIR/package.json" ".engines.typescript")
   if [ ! -n "$ts_engine"]; then
-    echo "Installing Typescript" | indent
+    echo "-----> Installing Typescript" | indent
     npm install -g typescript@"$ts_engine"
+    echo "-----> Compiling Typescript" | indent
     tsc
     exit 1
   fi
