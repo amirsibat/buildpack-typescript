@@ -53,10 +53,8 @@ if [ ! -s $1/tsconfig.json ]; then
 else 
   # check if the file can be parsed
   TS_ENGINE=$(read_json "$BUILD_DIR/package.json" ".engines.typescript")
-    echo "-----> Installing Typescript" | indent
-    npm install -g typescript@"$TS_ENGINE"
-    echo "-----> Compiling Typescript" | indent
-    tsc
-    exit 1
+  echo "-----> Installing Typescript" | indent
+  npm install -g typescript@"$TS_ENGINE"
+  echo "-----> Compiling Typescript" | indent
+  tsc
 fi
-
